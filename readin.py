@@ -6,15 +6,15 @@ def bin_to_array(src_name, size):
 
     arr = np.fromfile(src_name, dtype=np.uint8)
 
-    r_arr = g_arr = b_arr = np.empty(size, dtype=int)
+    r_arr, g_arr, b_arr = [], [], []
 
-    for i in range(size):
+    for i in range(size * 3):
         if i % 3 == 0:
-            r_arr[i] = arr[i]
+            r_arr.append(arr[i])
         elif i % 3 == 1:
-            g_arr[i] = arr[i]
+            g_arr.append(arr[i])
         else:
-            b_arr[i] = arr[i]
+            b_arr.append(arr[i])
 
     return r_arr, g_arr, b_arr
 
