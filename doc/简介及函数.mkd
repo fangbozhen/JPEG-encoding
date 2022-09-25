@@ -1,0 +1,52 @@
+# JPEG encoder docs
+
+## 简介
+
+jpeg-encoding 实现了读入一个二进制图形文件并将它进行JPEG压缩的过程file:///home/gratian/Desktop/JPEG-encoding/doc/%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%87%BD%E6%95%B0.md
+
+
+主要分为颜色空间转换、离散余弦变换、量化、zigzag排列和压缩的过程
+
+## 颜色空间转换
+
+```python
+def RGB_to_YCrCb(r_arr, g_arr, b_arr, size)
+```
+
+RGB_to_YCrCb函数实现了从三通道数据到YCrCb格式的转换。
+
+输入包括三个数组，分别表示R，G，B三个通道的数据，以及总像素数size。输出为三个数组，分别表示亮度Y以及色度Cr、Cb
+
+## 离散余弦变换（Discrete Cosine Transform）
+
+```python
+def dct(y_arr, cr_arr, cb_arr, height, width)
+```
+
+函数dct实现了对原图像的划分为$ 8 \times 8 $的块，并对每一块进行2维的离散余弦变换。
+
+你需要输入三个一维数组分别为亮度Y和色度Cr、Cb的数据，以及图片的长和宽。函数返回一个**二维**的数组，表示进行变换后的图片
+
+> 注意，如果图片的长或宽不是8的整数倍，将会返回ValueError
+
+## 量化
+
+```python
+def quantize(y_arr, cr_arr, cb_arr, height, width)
+```
+
+quantize函数根据亮度和色度的量化矩阵进行处理，输入亮度Y和色度Cr、Cb的矩阵以及矩阵的长和宽，输出量化后的矩阵
+
+## zigzag排列
+
+```python
+def zigzag(y_arr, cr_arr, cb_arr, height, width)
+```
+
+zigzag函数对二维矩阵通过zigzag变换为一维矩阵。输入三个维度的矩阵以及矩阵的长宽，将会对矩阵划分成的每个$8 \times 8$块内进行zigzag排列，返回一个二维数组，第一维为块的编号，第二维大小为64, 表示块的具体内容
+
+## 压缩
+
+压缩过程实际实现了游程编码和范式Huffman编码的综合过程。
+
+输入三个维度的块的二维数组，会返回经过游程编码和范式Huffman编码后的二进制文件。返回值是一维的str数组，第一维是块的编号，储存每个块变换后的二进制数据
