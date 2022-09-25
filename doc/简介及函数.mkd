@@ -2,8 +2,7 @@
 
 ## 简介
 
-jpeg-encoding 实现了读入一个二进制图形文件并将它进行JPEG压缩的过程file:///home/gratian/Desktop/JPEG-encoding/doc/%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%87%BD%E6%95%B0.md
-
+jpeg-encoding 实现了读入一个二进制图形文件并将它进行JPEG压缩的过程
 
 主要分为颜色空间转换、离散余弦变换、量化、zigzag排列和压缩的过程
 
