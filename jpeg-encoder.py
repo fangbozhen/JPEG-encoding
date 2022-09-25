@@ -5,6 +5,7 @@ from rgb_to_ycrcb import RGB_to_YCrCb
 from Discrete_cosine_transform import dct
 from quantization import quantize
 from zigzag import zigzag
+from compress import compress
 
 
 def main():
@@ -24,9 +25,10 @@ def main():
     R, G, B = bin_to_array(src_filename, size)
     Y, Cr, Cb = RGB_to_YCrCb(R, G, B, size)
     Y_2d, Cr_2d, Cb_2d = dct(Y, Cr, Cb, height, width)
+    # print(Y_2d[0:5, 0:5])
     Y_qt, Cr_qt, Cb_qt = quantize(Y_2d, Cr_2d, Cb_2d, height, width)
     Y_zz, Cr_zz, Cb_zz = zigzag(Y_qt, Cr_qt, Cb_qt, height, width)
-
+    Y_res, Cr_res, Cb_res = compress(Y_zz, Cr_zz, Cb_zz, height, width)
 
 
 if __name__ == '__main__':
