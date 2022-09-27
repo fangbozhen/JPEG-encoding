@@ -103,15 +103,12 @@ def write_huffman_ac_table(typ):
     return res
 
 
-def get_data(arr_1, arr_2, arr_3, cnt):
+def get_data(list_1, list_2, list_3, cnt):
     res = []
     tmp = ''
+
     for i in range(cnt):
-        tmp = tmp + arr_1[i]
-    for i in range(cnt):
-        tmp = tmp + arr_2[i]
-    for i in range(cnt):
-        tmp = tmp + arr_3[i]
+        tmp = tmp + list_1[i] + list_2[i] + list_3[i]
 
     # 补零
     if len(tmp) % 8 != 0:
@@ -125,12 +122,14 @@ def get_data(arr_1, arr_2, arr_3, cnt):
             s = s + int(tmp[i + j]) * t
             t = t // 2
         res.append(s)
+        if s == 255:
+            res.append(0)
     res = bytes(res)
 
     return res
 
 
-def write(file, y_arr, cb_arr, cr_arr, height, width):
+def write(file, y_list, cb_list, cr_list, height, width):
     """输出jpeg文件"""
     jpegfile = open(file, "wb+")
 
@@ -147,16 +146,12 @@ def write(file, y_arr, cb_arr, cr_arr, height, width):
     # 添加DQT
     # 第一张表
     jpegfile.write(hex_to_bin('FF DB 00 43 00'))
-    t = load_quantization_table('lum')
-    for i in range(8):
-        for j in range(8):
-            jpegfile.write(dec_to_bin(t[i][j], 8))
+    t = load_quantization_table('lum').reshape([64])
+    jpegfile.write(bytes(t.tolist()))
     # 第二张表
     jpegfile.write(hex_to_bin('FF DB 00 43 01'))
-    t = load_quantization_table('chrom')
-    for i in range(8):
-        for j in range(8):
-            jpegfile.write(dec_to_bin(t[i][j], 8))
+    t = load_quantization_table('chrom').reshape([64])
+    jpegfile.write(bytes(t.tolist()))
 
     # 添加 SOF start of frame
     jpegfile.write(hex_to_bin('FF C0'))
@@ -215,7 +210,7 @@ def write(file, y_arr, cb_arr, cr_arr, height, width):
 
     # 添加图像数据
     cnt = (height // 8) * (width // 8)
-    jpegfile.write(get_data(y_arr, cb_arr, cr_arr, cnt))
+    jpegfile.write(get_data(y_list, cb_list, cr_list, cnt))
 
     # 添加 EOF End Of Image
     jpegfile.write(hex_to_bin('FF D9'))

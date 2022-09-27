@@ -6,9 +6,6 @@ def bin_to_array(src_name, size):
 
     arr = np.fromfile(src_name, dtype=np.uint8)
 
-    print(arr)
-    print('------------------')
-
     r_arr, g_arr, b_arr = [], [], []
 
     for i in range(size * 3):
@@ -19,5 +16,5 @@ def bin_to_array(src_name, size):
         else:
             b_arr.append(arr[i])
 
-    return r_arr, g_arr, b_arr
+    return np.array(r_arr), np.array(g_arr), np.array(b_arr)
 

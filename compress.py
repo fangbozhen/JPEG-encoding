@@ -36,7 +36,7 @@ def get_bin(val, length):
     return res
 
 
-def solve_block(arr, typ):
+def compress(arr, typ):
     cnt = 64
     res = ''
 
@@ -95,22 +95,6 @@ def solve_block(arr, typ):
         print('======================')
 
     return res
-
-
-def calc(arr, rows, cols, typ):
-    cnt = (rows // 8) * (cols // 8)
-    res = []
-    for i in range(cnt):
-        res.append(solve_block(arr[i], typ))
-
-    return res
-
-
-def compress(y_arr, cb_arr, cr_arr, height, width):
-    y_res = calc(y_arr, height, width, 'lum')
-    cb_res = calc(cb_arr, height, width, 'chrom')
-    cr_res = calc(cr_arr, height, width, 'chrom')
-    return y_res, cb_res, cr_res
 
 
 if __name__ == '__main__':
