@@ -1,5 +1,5 @@
-import numpy
 import numpy as np
+from scipy import fftpack
 
 
 def dct_2d(mat):
@@ -14,8 +14,8 @@ def dct_2d(mat):
             cnt = 0
             for i in range(rows):
                 for j in range(cols):
-                    cos1 = np.cos((2 * i + u) * np.pi / 16)
-                    cos2 = np.cos((2 * j + v) * np.pi / 16)
+                    cos1 = np.cos((2 * i + 1) * u * np.pi / 16)
+                    cos2 = np.cos((2 * j + 1) * v * np.pi / 16)
                     cnt += mat[i, j] * cos1 * cos2
             res[u, v] = 1 / 4 * cu * cv * cnt
 
@@ -24,7 +24,7 @@ def dct_2d(mat):
 
 def to_2d(arr, height, width):
     """将一维数组转换为二维数组"""
-    res = np.empty((height, width), dtype=int)
+    res = np.empty((height, width), dtype=float)
     for i in range(height):
         for j in range(width):
             res[i, j] = arr[i * width + j]
@@ -39,16 +39,17 @@ def calculate(arr, height, width):
     rows, cols = height // 8, width // 8
 
     arr_2d = to_2d(arr, height, width)
-    res = np.empty((height, width), dtype=int)
+    res = np.empty((height, width), dtype=float)
 
     for i in range(0, height, 8):
         for j in range(0, width, 8):
-            res[i:i+8, j:j+8] = dct_2d(arr_2d[i:i+8, j:j+8] - 128)
+            # res[i:i+8, j:j+8] = dct_2d(arr_2d[i:i+8, j:j+8] - 128)
+            res[i:i+8, j:j+8] = fftpack.dct(fftpack.dct(arr_2d[i:i + 8, j:j + 8] - 128, norm='ortho').T, norm='ortho').T
     return res
 
 
-def dct(y_arr, cr_arr, cb_arr, height, width):
+def dct(y_arr, cb_arr, cr_arr, height, width):
     y = calculate(y_arr, height, width)
-    cr = calculate(cr_arr, height, width)
     cb = calculate(cb_arr, height, width)
-    return y, cr, cb
+    cr = calculate(cr_arr, height, width)
+    return y, cb, cr

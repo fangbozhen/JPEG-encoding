@@ -12,10 +12,10 @@ def calc(arr, q, rows, cols):
     return res
 
 
-def quantize(y_arr, cr_arr, cb_arr, height, width):
+def quantize(y_arr, cb_arr, cr_arr, height, width):
     q = load_quantization_table('lum')
     y_res = calc(y_arr, q, height, width)
     q = load_quantization_table('chrom')
-    cr_res = calc(cr_arr, q, height, width)
     cb_res = calc(cb_arr, q, height, width)
-    return y_res, cr_res, cb_res
+    cr_res = calc(cr_arr, q, height, width)
+    return y_res, cb_res, cr_res

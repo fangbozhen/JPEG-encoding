@@ -2,6 +2,7 @@ import numpy as np
 from math import log
 
 from utils import load_huffman_table
+from settings import DEBUG
 
 
 def huffman_ac(typ, x, y):
@@ -42,24 +43,36 @@ def solve_block(arr, typ):
     # 处理直流系数
     length = int(log(abs(arr[0]), 2)) + 1 if arr[0] else 0
     if arr[0] < 0:
-        dis = 2 ** length - 1 - abs(arr[0])
+        dis = (2 ** length) - 1 - abs(arr[0])
     else:
         dis = arr[0]
     res += huffman_dc(typ, length)
     res += get_bin(dis, length)
 
+    if DEBUG == 1:
+        print('type:', typ)
+        print('DC (length, value) = ({}, {}),  encode = [{}], [{}]'.format(
+                length, arr[0], huffman_dc(typ, length), get_bin(dis, length)
+        ))
+
     # 处理交流系数
     i = 1
-    while i < cnt:
+    while i < cnt - 1:
         if arr[i] == 0:
             st = i
-            while i < cnt - 1 and arr[i] == 0 and i - st < 15:
+            while i < cnt - 1 and arr[i] == 0:
                 i = i + 1
-            x = i - st
             # 处理 EOB
             if i == cnt - 1:
                 res += huffman_ac(typ, 0, 0)
+
+                if DEBUG == 1:
+                    print('EOB: {}'.format(huffman_ac(typ, 0, 0)))
+
                 return res
+            if i - st > 15:
+                i = st + 15
+            x = i - st
         else:
             x = 0
 
@@ -70,25 +83,34 @@ def solve_block(arr, typ):
             dis = arr[i]
         res += huffman_ac(typ, x, y)
         res += get_bin(dis, y)
+
+        if DEBUG == 1:
+            print('AC value = {}, (run, size) = ({}, {}), encode = [{}], [{}]'.format(
+                arr[i], x, y, huffman_ac(typ, x, y), get_bin(dis, y)
+            ))
+
         i = i + 1
+
+    if DEBUG == 1:
+        print('======================')
 
     return res
 
 
 def calc(arr, rows, cols, typ):
     cnt = (rows // 8) * (cols // 8)
-    res = np.empty(cnt, dtype=str)
+    res = []
     for i in range(cnt):
-        res[i] = solve_block(arr[i], typ)
+        res.append(solve_block(arr[i], typ))
 
     return res
 
 
-def compress(y_arr, cr_arr, cb_arr, height, width):
+def compress(y_arr, cb_arr, cr_arr, height, width):
     y_res = calc(y_arr, height, width, 'lum')
-    cr_res = calc(cr_arr, height, width, 'chrom')
     cb_res = calc(cb_arr, height, width, 'chrom')
-    return y_res, cr_res, cb_res
+    cr_res = calc(cr_arr, height, width, 'chrom')
+    return y_res, cb_res, cr_res
 
 
 if __name__ == '__main__':
