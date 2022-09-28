@@ -1,5 +1,5 @@
 import numpy as np
-from scipy import fftpack
+# from scipy import fftpack
 
 
 def dct_2d(mat):
