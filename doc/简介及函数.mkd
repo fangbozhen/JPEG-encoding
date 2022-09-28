@@ -54,7 +54,7 @@ zigzag函数对二维矩阵通过zigzag变换为一维矩阵。输入$ 8 \times 
 
 ## 输出
 
-write函数中实现了对JPEG文件头的书写，具体可见同目录下的[JPEG文件头](/JPEG文件头.mkd)
+write函数中实现了对JPEG文件头的书写，具体可见同目录下的[JPEG文件头](doc/JPEG文件头.mkd)
 
 ## settings
 
