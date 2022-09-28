@@ -91,6 +91,8 @@ def compress(arr, typ):
 
         i = i + 1
 
+    res += huffman_ac(typ, 0, 0)
+
     if DEBUG == 1:
         print('======================')
 

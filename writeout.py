@@ -212,7 +212,7 @@ def write(file, y_list, cb_list, cr_list, height, width):
     cnt = (height // 8) * (width // 8)
     jpegfile.write(get_data(y_list, cb_list, cr_list, cnt))
 
-    # 添加 EOF End Of Image
+    # 添加 EOI End Of Image
     jpegfile.write(hex_to_bin('FF D9'))
 
     jpegfile.close()

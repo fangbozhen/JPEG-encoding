@@ -19,33 +19,54 @@ RGB_to_YCrCb函数实现了从三通道数据到YCrCb格式的转换。
 ## 离散余弦变换（Discrete Cosine Transform）
 
 ```python
-def dct(y_arr, cr_arr, cb_arr, height, width)
+def dct_2d(mat)
 ```
 
 函数dct实现了对$ 8 \times 8 $的块进行2维的离散余弦变换。
 
-你需要输入三个一维数组分别为亮度Y和色度Cr、Cb的数据，以及图片的长和宽。函数返回一个**二维**的数组，表示进行变换后的图片
+使用矩阵乘法。
 
-> 注意，如果图片的长或宽不是8的整数倍，将会返回ValueError
+你需要输入$ 8 \times 8 $的块，函数将会返回它进行离散余弦变换后的结果
 
 ## 量化
 
 ```python
-def quantize(y_arr, cr_arr, cb_arr, height, width)
+def quantize(arr, typ)
 ```
 
-quantize函数根据亮度和色度的量化矩阵进行处理，输入亮度Y和色度Cr、Cb的矩阵以及矩阵的长和宽，输出量化后的矩阵
+quantize函数根据亮度和色度的量化矩阵进行处理，输入$ 8 \times 8 $的数据块，输出量化后的结果
+
+> **注意**：量化表会根据你在setting中设置的quality对标准表进行变化
 
 ## zigzag排列
 
 ```python
-def zigzag(y_arr, cr_arr, cb_arr, height, width)
+def zigzag(arr)
 ```
 
-zigzag函数对二维矩阵通过zigzag变换为一维矩阵。输入三个维度的矩阵以及矩阵的长宽，将会对矩阵划分成的每个$8 \times 8$块内进行zigzag排列，返回一个二维数组，第一维为块的编号，第二维大小为64, 表示块的具体内容
+zigzag函数对二维矩阵通过zigzag变换为一维矩阵。输入$ 8 \times 8 $块，输出长度为64的一维数组
 
 ## 压缩
 
 压缩过程实际实现了游程编码和范式Huffman编码的综合过程。
 
-输入三个维度的块的二维数组，会返回经过游程编码和范式Huffman编码后的二进制文件。返回值是一维的str数组，第一维是块的编号，储存每个块变换后的二进制数据
+输入一个$ 8 \times 8 $的数据块以及操作色块的类型，会返回经过游程编码和范式Huffman编码后的二进制文件。返回值是str类型
+
+## 输出
+
+write函数中实现了对JPEG文件头的书写，具体可见同目录下的[JPEG文件头](/JPEG文件头.mkd)
+
+## settings
+
+在设置中配置基础的设置
+
+你可以通过设置 DEBUG = 1 获得图片在每个处理阶段的数据
+
+quality是在1-100中的整数值，值越大，图像质量越高，压缩比越低
+
+图像的长、宽、通道基本信息
+
+
+
+
+

@@ -5,16 +5,19 @@ from scipy import fftpack
 def dct_2d(mat):
     """二维离散余弦变换"""
 
+
     rows = cols = 8
-    Mat = np.zeros((rows, cols), dtype=float)
+    Mat = np.zeros((rows, cols), dtype=np.float)
     for i in range(rows):
         for j in range(cols):
-            x = 1 if i else 0.5 ** 0.5
-            Mat[i][j] = x * np.cos(np.pi * (2 * j + 1) * i / 16)
+            if i:
+                Mat[i][j] = 0.5 * np.cos((2 * j + 1) * i * np.pi / 16)
+            else:
+                Mat[i][j] = 0.125 ** 0.5
 
-    res = Mat.dot(Mat.T)
+    res = mat.dot(Mat.T)
+    res = Mat.dot(res)
     return res
-
 
     # 用scipy包实现的DCT
     # return fftpack.dct(fftpack.dct(mat, norm='ortho').T, norm='ortho').T
@@ -37,3 +40,5 @@ def dct_2d(mat):
 
     return res
     '''
+
+
