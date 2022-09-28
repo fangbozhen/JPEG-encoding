@@ -14,7 +14,7 @@ numpy >= 1.21.5
 你可以通过以下命令使用
 
 ```
-python ./jpeg_encoder.py demo.bin demo.jpg
+python ./jpeg_encoder.py img/demo.bin demo.jpg
 ```
 
 两个参数分别为二进制文件名（含位置）和输出的文件名
